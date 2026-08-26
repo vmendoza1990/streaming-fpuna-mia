@@ -4,14 +4,14 @@ Este repositorio contiene la implementación de un pipeline de streaming de dato
 
 ## 🚀 Instrucciones de Ejecución
 
-Para ejecutar el entorno interactivo de Marimo y las pruebas, puedes utilizar Docker o uv.
+Para ejecutar el entorno interactivo de Marimo y las pruebas, se puede utilizar Docker o uv.
 
 ### Opción 1: Usando Docker (Recomendado)
 El proyecto incluye un docker-compose.yml preconfigurado.
 
 1. Levantar el entorno interactivo de Marimo:
 docker compose up --build
-*(Accede a http://localhost:2718 en tu navegador)*
+*(Accede a http://localhost:2718)*
 
 2. Ejecutar la suite de pruebas automatizadas:
 docker compose run --rm notebook uv run pytest
@@ -50,7 +50,7 @@ Para evitar esto, configuramos un **Timer de Event Time** (TimeDomain.WATERMARK)
 
 ### 5. Idempotencia y Efectos Externos
 En sistemas distribuidos, un sink (base de datos destino) puede experimentar fallos de red que obliguen a Beam a reintentar la escritura del mismo resultado varias veces. 
-* Si usáramos un modelo Append-Only (POST tradicional), los reintentos duplicarían el ingreso total registrado. 
+* Si hubiesemos utilizado un modelo Append-Only (POST tradicional), los reintentos duplicarían el ingreso total registrado. 
 * Para solucionarlo, construimos una **clave de idempotencia lógica** (merchant_id|window_start) y simulamos operaciones UPSERT. De esta manera, sin importar cuántas veces el pipeline intente escribir el resultado final de una ventana para un comercio, la base de datos simplemente sobreescribirá el mismo registro asociado a esa clave, asegurando una consistencia exacta (Exactly-Once Semantics).
 
 ---
